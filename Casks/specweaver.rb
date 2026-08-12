@@ -1,6 +1,6 @@
 cask "specweaver" do
-  version "0.1.1"
-  sha256 "a8af46ef0712ada2dc1b9e0e374192c5fe49b232c6ae88ab1529486389b4d666"
+  version "0.1.2"
+  sha256 "918d112ab849087af980018880bf788bcb75b865d739266f4fdad5c23ebb0ad5"
 
   url "https://github.com/yangfanfengshun/SpecWeaver-App/releases/download/v#{version}/SpecWeaver_#{version}_universal.dmg"
   name "SpecWeaver"
@@ -18,8 +18,14 @@ cask "specweaver" do
   # MCP 是 Python 实现、靠 uv 启动。缺了它开关能开但宿主拉不起 MCP，
   # 而且 App 界面上看不出异常，所以在安装期就把它带上。
   depends_on formula: "uv"
+  # sw merge 全程靠 glab 调 GitLab、靠 jq 解析它的 JSON 输出。
+  depends_on formula: "glab"
+  depends_on formula: "jq"
 
   app "SpecWeaver.app"
+  # 命令行入口随 App 一起分发。指向 .app 内的脚本而不是 ~/.specweaver/，
+  # 后者要等 App 首次启动同步完才存在，装完就敲 sw 会扑空。
+  binary "#{appdir}/SpecWeaver.app/Contents/Resources/runtime/scripts/sw"
 
   # 应用未做签名公证，首次打开会被 Gatekeeper 拦下并提示「已损坏」。
   # 这里替用户剥掉 quarantine，等同于手动敲 xattr。
@@ -27,6 +33,9 @@ cask "specweaver" do
   postflight do
     system_command "/usr/bin/xattr",
                    args: ["-dr", "com.apple.quarantine", "#{appdir}/SpecWeaver.app"]
+    # 打包过程可能丢执行位，binary 软链过去也就跑不起来
+    system_command "/bin/chmod",
+                   args: ["+x", "#{appdir}/SpecWeaver.app/Contents/Resources/runtime/scripts/sw"]
   end
 
   # 只在 brew uninstall --zap 时执行。~/.specweaver 里存着用户配置的认证信息，
