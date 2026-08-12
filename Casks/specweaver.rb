@@ -12,7 +12,9 @@ cask "specweaver" do
     strategy :github_latest
   end
 
-  depends_on macos: ">= :monterey"
+  # 写成符号而不是 ">= :monterey" 字符串——后者已被 Homebrew 弃用，
+  # 符号形式本身就表示「该版本及以上」。
+  depends_on macos: :monterey
   # MCP 是 Python 实现、靠 uv 启动。缺了它开关能开但宿主拉不起 MCP，
   # 而且 App 界面上看不出异常，所以在安装期就把它带上。
   depends_on formula: "uv"
