@@ -1,6 +1,6 @@
 cask "specweaver" do
-  version "0.1.2"
-  sha256 "918d112ab849087af980018880bf788bcb75b865d739266f4fdad5c23ebb0ad5"
+  version "0.1.3"
+  sha256 "2cfc8123d2b1588e612f3ddfe0978a7f400cf0f7e9712cb2d3066acc214a7218"
 
   url "https://github.com/yangfanfengshun/SpecWeaver-App/releases/download/v#{version}/SpecWeaver_#{version}_universal.dmg"
   name "SpecWeaver"
@@ -16,9 +16,10 @@ cask "specweaver" do
   # 符号形式本身就表示「该版本及以上」。
   depends_on macos: :monterey
   # MCP 是 Python 实现、靠 uv 启动。缺了它开关能开但宿主拉不起 MCP，
-  # 而且 App 界面上看不出异常，所以在安装期就把它带上。
+  # 装期带上，省得用户装完再被 App 提示一次。
   depends_on formula: "uv"
   # sw merge 全程靠 glab 调 GitLab、靠 jq 解析它的 JSON 输出。
+  # 缺了它们 App 会锁住 GitLab 的配置入口，这里一并带上。
   depends_on formula: "glab"
   depends_on formula: "jq"
 
