@@ -1,6 +1,6 @@
 cask "specweaver" do
-  version "0.1.3"
-  sha256 "2cfc8123d2b1588e612f3ddfe0978a7f400cf0f7e9712cb2d3066acc214a7218"
+  version "0.1.4"
+  sha256 "2c212c5b443e1ca28faeb85e70e2a5f3c1138d0dfdcd1bbe78bae350e06f2843"
 
   url "https://github.com/yangfanfengshun/SpecWeaver-App/releases/download/v#{version}/SpecWeaver_#{version}_universal.dmg"
   name "SpecWeaver"
